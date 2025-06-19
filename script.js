@@ -25,10 +25,12 @@ let selectedSquare = null;
 let gameHistory = [];
 let capturedPieces = { white: [], black: [] };
 let enPassantTarget = null;
+
 let castlingRights = {
   white: { kingside: true, queenside: true },
   black: { kingside: true, queenside: true },
 };
+
 let pendingPromotion = null;
 
 // Inicializar tablero
@@ -380,12 +382,15 @@ function makeMove(fromRow, fromCol, toRow, toCol) {
 function promoteToQueen() {
   promotePawn("queen");
 }
+
 function promoteToRook() {
   promotePawn("rook");
 }
+
 function promoteToBishop() {
   promotePawn("bishop");
 }
+
 function promoteToKnight() {
   promotePawn("knight");
 }
