@@ -1,71 +1,71 @@
 body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f5f5f5;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f5f5f5;
 }
 
 .chess-container {
-    text-align: center;
+  text-align: center;
 }
 
 #chessboard {
-    display: grid;
-    grid-template-columns: repeat(8, 60px);
-    grid-template-rows: repeat(8, 60px);
-    gap: 0;
-    margin: 20px auto;
-    border: 2px solid #333;
+  display: grid;
+  grid-template-columns: repeat(8, 60px);
+  grid-template-rows: repeat(8, 60px);
+  gap: 0;
+  margin: 20px auto;
+  border: 2px solid #333;
 }
 
 .square {
-    width: 60px;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 
 .light {
-    background-color: #f0d9b5;
+  background-color: #f0d9b5;
 }
 
 .dark {
-    background-color: #b58863;
+  background-color: #b58863;
 }
 
 .highlight {
-    background-color: rgba(0, 255, 0, 0.5);
+  background-color: rgba(0, 255, 0, 0.5);
 }
 
 .piece {
-    font-size: 40px;
-    user-select: none;
+  font-size: 40px;
+  user-select: none;
 }
 
 .info-panel {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #eee;
-    border-radius: 5px;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #eee;
+  border-radius: 5px;
 }
 
 #reset-btn {
-    padding: 8px 16px;
-    margin-top: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  padding: 8px 16px;
+  margin-top: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 #reset-btn:hover {
-    background-color: #45a049;
+  background-color: #45a049;
 }
 
 /* Estilos para el modal de promoción */

@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let lastMove = null;
   let castlingRights = {
     white: { kingside: true, queenside: true },
-    black: { kingside: true, queenside: true }
+    black: { kingside: true, queenside: true },
   };
   let pendingPromotion = null;
 
@@ -23,14 +23,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Event listeners
   resetBtn.addEventListener("click", resetGame);
-  promotionPieces.forEach(piece => {
+  promotionPieces.forEach((piece) => {
     piece.addEventListener("click", handlePromotionSelection);
   });
 
   // Funciones del juego
   function createInitialBoard() {
     // Representación del tablero (8x8)
-    const board = Array(8).fill().map(() => Array(8).fill(null));
+    const board = Array(8)
+      .fill()
+      .map(() => Array(8).fill(null));
 
     // Colocar piezas blancas
     board[0][0] = { type: "rook", color: "white", hasMoved: false };
@@ -121,20 +123,39 @@ document.addEventListener("DOMContentLoaded", () => {
     // Si hay una pieza seleccionada y se hace clic en un movimiento válido
     if (selectedPiece) {
       const validMoves = getValidMoves(selectedPiece.row, selectedPiece.col);
-      const moveData = validMoves.find(m => m.row === row && m.col === col);
+      const moveData = validMoves.find((m) => m.row === row && m.col === col);
 
       if (moveData) {
         // Verificar si el movimiento deja al rey en jaque
         const tempBoard = cloneBoard(boardState);
-        makeTempMove(tempBoard, selectedPiece.row, selectedPiece.col, row, col, moveData.specialMove);
-        
+        makeTempMove(
+          tempBoard,
+          selectedPiece.row,
+          selectedPiece.col,
+          row,
+          col,
+          moveData.specialMove
+        );
+
         if (!isKingInCheck(currentPlayer, tempBoard)) {
           // Manejar promoción de peón
           if (selectedPiece.piece.type === "pawn" && (row === 0 || row === 7)) {
-            pendingPromotion = { fromRow: selectedPiece.row, fromCol: selectedPiece.col, toRow: row, toCol: col, specialMove: moveData.specialMove };
+            pendingPromotion = {
+              fromRow: selectedPiece.row,
+              fromCol: selectedPiece.col,
+              toRow: row,
+              toCol: col,
+              specialMove: moveData.specialMove,
+            };
             showPromotionModal(currentPlayer);
           } else {
-            movePiece(selectedPiece.row, selectedPiece.col, row, col, moveData.specialMove);
+            movePiece(
+              selectedPiece.row,
+              selectedPiece.col,
+              row,
+              col,
+              moveData.specialMove
+            );
             currentPlayer = currentPlayer === "white" ? "black" : "white";
             checkGameState();
           }
@@ -150,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function handlePromotionSelection(e) {
     if (!pendingPromotion) return;
-    
+
     const pieceType = e.target.dataset.piece;
     movePiece(
       pendingPromotion.fromRow,
@@ -160,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
       pendingPromotion.specialMove,
       pieceType
     );
-    
+
     hidePromotionModal();
     currentPlayer = currentPlayer === "white" ? "black" : "white";
     checkGameState();
@@ -169,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showPromotionModal(color) {
-    promotionPieces.forEach(piece => {
+    promotionPieces.forEach((piece) => {
       piece.textContent = getPieceSymbol({ type: piece.dataset.piece, color });
       piece.style.color = color === "white" ? "#fff" : "#000";
     });
@@ -217,7 +238,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const startRow = color === "white" ? 1 : 6;
 
         // Movimiento hacia adelante (1 casilla)
-        if (isInBounds(row + direction, col) && !boardState[row + direction][col]) {
+        if (
+          isInBounds(row + direction, col) &&
+          !boardState[row + direction][col]
+        ) {
           moves.push({ row: row + direction, col });
 
           // Primer movimiento (2 casillas)
@@ -235,16 +259,19 @@ document.addEventListener("DOMContentLoaded", () => {
               moves.push({ row: row + direction, col: newCol });
             }
             // Captura al paso
-            else if (!targetPiece && lastMove && 
-                     lastMove.piece.type === "pawn" && 
-                     lastMove.piece.color === enemyColor &&
-                     Math.abs(lastMove.from.row - lastMove.to.row) === 2 &&
-                     lastMove.to.row === row &&
-                     lastMove.to.col === newCol) {
-              moves.push({ 
-                row: row + direction, 
+            else if (
+              !targetPiece &&
+              lastMove &&
+              lastMove.piece.type === "pawn" &&
+              lastMove.piece.color === enemyColor &&
+              Math.abs(lastMove.from.row - lastMove.to.row) === 2 &&
+              lastMove.to.row === row &&
+              lastMove.to.col === newCol
+            ) {
+              moves.push({
+                row: row + direction,
                 col: newCol,
-                specialMove: "enPassant"
+                specialMove: "enPassant",
               });
             }
           }
@@ -253,8 +280,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       case "rook":
         // Movimientos horizontales y verticales
-        for (const [dr, dc] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-          let r = row + dr, c = col + dc;
+        for (const [dr, dc] of [
+          [1, 0],
+          [-1, 0],
+          [0, 1],
+          [0, -1],
+        ]) {
+          let r = row + dr,
+            c = col + dc;
           while (isInBounds(r, c)) {
             if (!boardState[r][c]) {
               moves.push({ row: r, col: c });
@@ -273,8 +306,14 @@ document.addEventListener("DOMContentLoaded", () => {
       case "knight":
         // Movimientos en L
         for (const [dr, dc] of [
-          [2, 1], [2, -1], [-2, 1], [-2, -1],
-          [1, 2], [1, -2], [-1, 2], [-1, -2]
+          [2, 1],
+          [2, -1],
+          [-2, 1],
+          [-2, -1],
+          [1, 2],
+          [1, -2],
+          [-1, 2],
+          [-1, -2],
         ]) {
           const r = row + dr;
           const c = col + dc;
@@ -288,8 +327,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       case "bishop":
         // Movimientos diagonales
-        for (const [dr, dc] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) {
-          let r = row + dr, c = col + dc;
+        for (const [dr, dc] of [
+          [1, 1],
+          [1, -1],
+          [-1, 1],
+          [-1, -1],
+        ]) {
+          let r = row + dr,
+            c = col + dc;
           while (isInBounds(r, c)) {
             if (!boardState[r][c]) {
               moves.push({ row: r, col: c });
@@ -308,10 +353,17 @@ document.addEventListener("DOMContentLoaded", () => {
       case "queen":
         // Combina movimientos de torre y alfil
         for (const [dr, dc] of [
-          [1, 0], [-1, 0], [0, 1], [0, -1],  // Torre
-          [1, 1], [1, -1], [-1, 1], [-1, -1] // Alfil
+          [1, 0],
+          [-1, 0],
+          [0, 1],
+          [0, -1], // Torre
+          [1, 1],
+          [1, -1],
+          [-1, 1],
+          [-1, -1], // Alfil
         ]) {
-          let r = row + dr, c = col + dc;
+          let r = row + dr,
+            c = col + dc;
           while (isInBounds(r, c)) {
             if (!boardState[r][c]) {
               moves.push({ row: r, col: c });
@@ -346,33 +398,37 @@ document.addEventListener("DOMContentLoaded", () => {
         // Enroque
         if (!piece.hasMoved && !isKingInCheck(color)) {
           // Enroque corto (kingside)
-          if (castlingRights[color].kingside && 
-              !boardState[row][5] && 
-              !boardState[row][6] && 
-              boardState[row][7]?.type === "rook" && 
-              !boardState[row][7].hasMoved &&
-              !isSquareUnderAttack(row, 5, color) &&
-              !isSquareUnderAttack(row, 6, color)) {
-            moves.push({ 
-              row: row, 
-              col: 6, 
-              specialMove: "castleKingside" 
+          if (
+            castlingRights[color].kingside &&
+            !boardState[row][5] &&
+            !boardState[row][6] &&
+            boardState[row][7]?.type === "rook" &&
+            !boardState[row][7].hasMoved &&
+            !isSquareUnderAttack(row, 5, color) &&
+            !isSquareUnderAttack(row, 6, color)
+          ) {
+            moves.push({
+              row: row,
+              col: 6,
+              specialMove: "castleKingside",
             });
           }
-          
+
           // Enroque largo (queenside)
-          if (castlingRights[color].queenside && 
-              !boardState[row][3] && 
-              !boardState[row][2] && 
-              !boardState[row][1] && 
-              boardState[row][0]?.type === "rook" && 
-              !boardState[row][0].hasMoved &&
-              !isSquareUnderAttack(row, 3, color) &&
-              !isSquareUnderAttack(row, 2, color)) {
-            moves.push({ 
-              row: row, 
-              col: 2, 
-              specialMove: "castleQueenside" 
+          if (
+            castlingRights[color].queenside &&
+            !boardState[row][3] &&
+            !boardState[row][2] &&
+            !boardState[row][1] &&
+            boardState[row][0]?.type === "rook" &&
+            !boardState[row][0].hasMoved &&
+            !isSquareUnderAttack(row, 3, color) &&
+            !isSquareUnderAttack(row, 2, color)
+          ) {
+            moves.push({
+              row: row,
+              col: 2,
+              specialMove: "castleQueenside",
             });
           }
         }
@@ -380,7 +436,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Filtrar movimientos que dejan al rey en jaque
-    return moves.filter(move => {
+    return moves.filter((move) => {
       const tempBoard = cloneBoard(boardState);
       makeTempMove(tempBoard, row, col, move.row, move.col, move.specialMove);
       return !isKingInCheck(color, tempBoard);
@@ -391,94 +447,106 @@ document.addEventListener("DOMContentLoaded", () => {
     return row >= 0 && row < 8 && col >= 0 && col < 8;
   }
 
-  function movePiece(fromRow, fromCol, toRow, toCol, specialMove = null, promotionType = "queen") {
+  function movePiece(
+    fromRow,
+    fromCol,
+    toRow,
+    toCol,
+    specialMove = null,
+    promotionType = "queen"
+  ) {
     const piece = boardState[fromRow][fromCol];
-    
+
     // Guardar información para captura al paso
     lastMove = {
-      piece: {...piece},
-      from: {row: fromRow, col: fromCol},
-      to: {row: toRow, col: toCol}
+      piece: { ...piece },
+      from: { row: fromRow, col: fromCol },
+      to: { row: toRow, col: toCol },
     };
-    
+
     // Manejar movimientos especiales
     if (specialMove === "enPassant") {
       // Captura al paso: eliminar el peón capturado
       const capturedPawnRow = fromRow;
       const capturedPawnCol = toCol;
       boardState[capturedPawnRow][capturedPawnCol] = null;
-    } 
-    else if (specialMove === "castleKingside") {
+    } else if (specialMove === "castleKingside") {
       // Enroque corto: mover la torre
       boardState[toRow][5] = boardState[toRow][7];
       boardState[toRow][7] = null;
       boardState[toRow][5].hasMoved = true;
-    } 
-    else if (specialMove === "castleQueenside") {
+    } else if (specialMove === "castleQueenside") {
       // Enroque largo: mover la torre
       boardState[toRow][3] = boardState[toRow][0];
       boardState[toRow][0] = null;
       boardState[toRow][3].hasMoved = true;
     }
-    
+
     // Mover la pieza
     boardState[toRow][toCol] = piece;
     boardState[fromRow][fromCol] = null;
     piece.hasMoved = true;
-    
+
     // Actualizar derechos de enroque
     if (piece.type === "king") {
       castlingRights[piece.color].kingside = false;
       castlingRights[piece.color].queenside = false;
-    } 
-    else if (piece.type === "rook") {
-      if (fromCol === 0) { // Torre de queenside
+    } else if (piece.type === "rook") {
+      if (fromCol === 0) {
+        // Torre de queenside
         castlingRights[piece.color].queenside = false;
-      } 
-      else if (fromCol === 7) { // Torre de kingside
+      } else if (fromCol === 7) {
+        // Torre de kingside
         castlingRights[piece.color].kingside = false;
       }
     }
-    
+
     // Coronación de peón
     if (piece.type === "pawn" && (toRow === 0 || toRow === 7)) {
-      boardState[toRow][toCol] = { 
-        type: promotionType, 
+      boardState[toRow][toCol] = {
+        type: promotionType,
         color: piece.color,
-        hasMoved: true
+        hasMoved: true,
       };
     }
   }
 
-  function makeTempMove(board, fromRow, fromCol, toRow, toCol, specialMove = null) {
+  function makeTempMove(
+    board,
+    fromRow,
+    fromCol,
+    toRow,
+    toCol,
+    specialMove = null
+  ) {
     const piece = board[fromRow][fromCol];
-    
+
     if (specialMove === "enPassant") {
       const capturedPawnRow = fromRow;
       const capturedPawnCol = toCol;
       board[capturedPawnRow][capturedPawnCol] = null;
-    } 
-    else if (specialMove === "castleKingside") {
+    } else if (specialMove === "castleKingside") {
       board[toRow][5] = board[toRow][7];
       board[toRow][7] = null;
-    } 
-    else if (specialMove === "castleQueenside") {
+    } else if (specialMove === "castleQueenside") {
       board[toRow][3] = board[toRow][0];
       board[toRow][0] = null;
     }
-    
+
     board[toRow][toCol] = piece;
     board[fromRow][fromCol] = null;
   }
 
   function cloneBoard(board) {
-    return board.map(row => row.map(piece => piece ? {...piece} : null));
+    return board.map((row) =>
+      row.map((piece) => (piece ? { ...piece } : null))
+    );
   }
 
   function isKingInCheck(color, customBoard = null) {
     const board = customBoard || boardState;
     let kingPos = null;
-    
+
     // Encontrar la posición del rey
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
@@ -490,20 +558,22 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       if (kingPos) break;
     }
-    
+
     // Verificar si alguna pieza enemiga puede atacar al rey
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
         const piece = board[row][col];
         if (piece && piece.color !== color) {
           const moves = getPseudoLegalMoves(row, col, board);
-          if (moves.some(m => m.row === kingPos.row && m.col === kingPos.col)) {
+          if (
+            moves.some((m) => m.row === kingPos.row && m.col === kingPos.col)
+          ) {
             return true;
           }
         }
       }
     }
-    
+
     return false;
   }
 
@@ -513,7 +583,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const piece = boardState[r][c];
         if (piece && piece.color !== color) {
           const moves = getPseudoLegalMoves(r, c, boardState);
-          if (moves.some(m => m.row === row && m.col === col)) {
+          if (moves.some((m) => m.row === row && m.col === col)) {
             return true;
           }
         }
@@ -549,8 +619,14 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
 
       case "rook":
-        for (const [dr, dc] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-          let r = row + dr, c = col + dc;
+        for (const [dr, dc] of [
+          [1, 0],
+          [-1, 0],
+          [0, 1],
+          [0, -1],
+        ]) {
+          let r = row + dr,
+            c = col + dc;
           while (isInBounds(r, c)) {
             if (!board[r][c]) {
               moves.push({ row: r, col: c });
@@ -574,10 +650,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function checkGameState() {
     // Verificar jaque mate o tablas
-    const hasLegalMoves = boardState.some((row, rowIndex) => 
-      row.some((piece, colIndex) => 
-        piece && piece.color === currentPlayer && 
-        getValidMoves(rowIndex, colIndex).length > 0
+    const hasLegalMoves = boardState.some((row, rowIndex) =>
+      row.some(
+        (piece, colIndex) =>
+          piece &&
+          piece.color === currentPlayer &&
+          getValidMoves(rowIndex, colIndex).length > 0
       )
     );
 
@@ -620,7 +698,7 @@ document.addEventListener("DOMContentLoaded", () => {
     pendingPromotion = null;
     castlingRights = {
       white: { kingside: true, queenside: true },
-      black: { kingside: true, queenside: true }
+      black: { kingside: true, queenside: true },
     };
     hidePromotionModal();
     renderBoard();
