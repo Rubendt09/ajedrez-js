@@ -3,28 +3,55 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ajedrez Local</title>
+    <title>Juego de Ajedrez Completo</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="chess-container">
-      <h1>Ajedrez JavaScript</h1>
-      <div id="chessboard"></div>
+    <div class="game-container">
+      <h1 style="text-align: center; color: #2c3e50; margin-bottom: 20px">
+        🏁 Ajedrez Completo 🏁
+      </h1>
+
       <div class="info-panel">
-        <div id="turn-indicator">Turno: Blancas</div>
-        <div id="game-status">Estado: Juego en progreso</div>
-        <button id="reset-btn">Reiniciar Juego</button>
+        <div id="turnIndicator" class="turn-indicator white-turn">
+          Turno: Blancas
+        </div>
+        <div id="statusMessage" class="status"></div>
+      </div>
+
+      <div class="board" id="chessBoard"></div>
+
+      <div class="captured-pieces">
+        <div class="captured-white">
+          <div class="captured-title">Piezas Blancas Capturadas:</div>
+          <div id="capturedWhite"></div>
+        </div>
+        <div class="captured-black">
+          <div class="captured-title">Piezas Negras Capturadas:</div>
+          <div id="capturedBlack"></div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="btn" onclick="newGame()">Nueva Partida</button>
+        <button class="btn" onclick="undoMove()">Deshacer Jugada</button>
       </div>
     </div>
+
+    <!-- Modal para promoción de peón -->
+    <div id="promotionModal" class="promotion-modal">
+      <div class="promotion-content">
+        <h3>Promoción de Peón</h3>
+        <p>Elige la pieza para promocionar:</p>
+        <div class="promotion-pieces">
+          <div class="promotion-piece" onclick="promoteToQueen()">♕</div>
+          <div class="promotion-piece" onclick="promoteToRook()">♖</div>
+          <div class="promotion-piece" onclick="promoteToBishop()">♗</div>
+          <div class="promotion-piece" onclick="promoteToKnight()">♘</div>
+        </div>
+      </div>
+    </div>
+
     <script src="script.js"></script>
   </body>
-
-  <div id="promotion-modal">
-    <div class="promotion-options">
-      <div class="promotion-piece" data-piece="queen">♕</div>
-      <div class="promotion-piece" data-piece="rook">♖</div>
-      <div class="promotion-piece" data-piece="bishop">♗</div>
-      <div class="promotion-piece" data-piece="knight">♘</div>
-    </div>
-  </div>
 </html>
