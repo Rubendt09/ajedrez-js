@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ajedrez en Red Local</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="game-container">
+      <h1 style="text-align: center; color: #2c3e50; margin-bottom: 20px">
+        🏁 Ajedrez en Red Local 🏁
+      </h1>
+
+      <div class="connection-panel" id="connectionPanel">
+        <button id="createGameBtn" class="btn">Crear Partida</button>
+        <div class="or-divider">o</div>
+        <input type="text" id="gameIdInput" placeholder="ID de Partida" />
+        <button id="joinGameBtn" class="btn">Unirse a Partida</button>
+        <div id="connectionStatus"></div>
+      </div>
+
+      <div class="info-panel" id="gamePanel" style="display: none">
+        <div id="gameIdDisplay"></div>
+        <div id="turnIndicator" class="turn-indicator white-turn">
+          Turno: Blancas
+        </div>
+        <div id="statusMessage" class="status"></div>
+      </div>
+
+      <div class="board" id="chessBoard"></div>
+
+      <div class="captured-pieces">
+        <div class="captured-white">
+          <div class="captured-title">Piezas Blancas Capturadas:</div>
+          <div id="capturedWhite"></div>
+        </div>
+        <div class="captured-black">
+          <div class="captured-title">Piezas Negras Capturadas:</div>
+          <div id="capturedBlack"></div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="btn" onclick="newGame()">Nueva Partida</button>
+        <button class="btn" onclick="undoMove()">Deshacer Jugada</button>
+      </div>
+    </div>
+
+    <!-- Modal para promoción de peón -->
+    <div id="promotionModal" class="promotion-modal">
+      <div class="promotion-content">
+        <h3>Promoción de Peón</h3>
+        <p>Elige la pieza para promocionar:</p>
+        <div class="promotion-pieces">
+          <div class="promotion-piece" onclick="promoteToQueen()">♕</div>
+          <div class="promotion-piece" onclick="promoteToRook()">♖</div>
+          <div class="promotion-piece" onclick="promoteToBishop()">♗</div>
+          <div class="promotion-piece" onclick="promoteToKnight()">♘</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
